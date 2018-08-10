@@ -1,0 +1,48 @@
+.query-container {
+    max-height: 35vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    left: 8px;
+    right: 0px;
+    z-index: 100;
+    background: white;
+    -webkit-box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.5);
+    -moz-box-shadow: 4px 4px 10px 0px rgba(50, 50, 50, 0.5);
+    box-shadow: 7px 4px 10px 0px rgba(50, 50, 50, 0.5);
+}
+
+.query-container input {
+    width: 80px;
+    margin: auto;
+    display: block;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.headerModal {
+    background-color: #2b425b;
+}
+
+.modal-header {
+    padding: 1px;
+}
+
+.close:focus,
+.close:hover {
+    color: #fff;
+}
+
+.modal-body>.close,
+.modal-header>.close {
+    top: 30%;
+}
+
+.close {
+    font-size: 30px;
+}
+.modal-dialog {
+    margin-top: 1%;
+}

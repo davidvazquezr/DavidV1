@@ -1,0 +1,9 @@
+{
+    "port": 5800,
+    "SQL_user": "sa",
+    "SQL_password": "sasa",
+    "SQL_server": "localhost",
+    "SQL_database": "David_V1",
+    "SQL_connectionTimeout": 60000
+
+}

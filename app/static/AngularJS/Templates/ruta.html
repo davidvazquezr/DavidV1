@@ -1,0 +1,339 @@
+<link href="css/modales.css" rel="stylesheet">
+<link href="css/ruta.css" rel="stylesheet">
+<div id="page-content" ng-init="init()">
+    <div class="row ">
+        <div class="col-sm-10 col-sm-push-1 mar-top">
+            <div id="">
+                <h1 class="page-header text-overflow">Rutas</h1>
+                </h1>
+            </div>
+        </div>
+        <div class="col-sm-10 col-sm-push-1 mar-top ">
+            <div class="panel ">
+                <div class="panel-body pad-top mar-top">
+                    <div class="col-sm-6  col-xs-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 ">Empresa:</label>
+                                <div class="col-sm-8">
+                                    <select ng-change="cambioEmpresa()" id="selEmpresas" class="form-control" ng-options="empresa as empresa.emp_nombre for empresa in empresas track by empresa.emp_idempresa" ng-model="empresaActual"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--    <div class="col-sm-2  col-xs-12">&nbsp;</div>
+                    <div class="col-sm-4  col-xs-12" ng-hide="newRuta">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-8">
+                                    <div class="col-sm-11 control-label">
+                                        <a class="form-control btn btn-block btn-primary" ng-click="verModalRuta(true,1);" style="font-size: 11px">Nueva Ruta</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-sm-6  col-xs-12" ng-show="empresaActual.emp_idempresa  != 0 ">
+                        <div class="col-sm-11 control-label">
+                            <a class="form-control btn btn-block btn-primary" ng-click="verModalRuta(true,1);">Nueva Ruta </a>
+                        </div>
+                    </div>
+                    <div class="row  col-sm-12  recuadro" ng-show="gridRutas" style="margin-top: 50PX">
+                        <div class="col-sm-12  mar-top">
+                            <table id="tblRutas">
+                                <thead>
+                                    <tr>
+                                        <th st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="operador">
+                                            Ruta
+                                        </th>
+                                        <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="descrip">
+                                            Descripción
+                                        </th>
+                                        <th st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="operador">
+                                            Operador
+                                        </th>
+                                        <th st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="unidad">
+                                            Unidad
+                                        </th>
+                                        <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="editar">
+                                            Editar
+                                        </th>
+                                        <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="eliminar">
+                                            Eliminar
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="ruta in rutas">
+                                        <td>
+                                            <span>{{ruta.ruta}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ruta.descripcion}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ruta.operador}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ruta.unidad}}</span>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-success  btn-icon" ng-click="verModalRuta(ruta,2)">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-danger btn-icon" ng-click="verModalRuta(ruta,3)">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Ruta crea la ruta-->
+<div class="modal fade " id="modalAddRuta" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header headerModal">
+                <button type="button" class="close" ng-click="salir()">&times;</button>
+                <h3 class="modal-title">Ruta / Operador / Unidad</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form class="form-horizontal" ng-submit="ruta(1)">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="nombreRuta">Nombre:</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group mar-btm">
+                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <input ng-disabled="bloquea" ng-model="nombreRuta" placeholder="" id="nombre" type="text" class="form-control" required="true">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="descripcion">Descripción:</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group mar-btm">
+                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <input ng-disabled="bloquea" ng-model="descripcion" placeholder="" id="descripcion" class="form-control" required="true">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="operador">Operador:</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group mar-btm">
+                                        <input ng-disabled="blqo " ng-model="nombreOperador" placeholder="" id="nombreOperador" type="text" class="form-control inputWhite sinBorde" required="true">
+                                        <span class="input-group-btn"> <button class="btn btn-mint" type="button"  ng-click="getOperadores();" ng-disabled="bloquea" ><i class="fa fa-plus"></i></button></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="unidad">Unidad:</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group mar-btm">
+                                        <input ng-disabled="blqu" ng-model="unidad" placeholder="" id="unidad" type="text" class="form-control inputWhite sinBorde" required="true">
+                                        <span class="input-group-btn"> <button class="btn btn-mint" type="button"  ng-click="getUnidades();" ng-disabled="bloquea" ><i class="fa fa-plus"></i></button></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary redondeo" name="signup" value="guardar"> {{texto}} Ruta </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--wizard-->
+<div class="modal fade " id="modalOperador" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header headerModal">
+                <h4 class="modal-title">Selecciona Operador:</h4>
+                <button type="button" class="close" ng-click="salirOpe()">&times;</button>
+            </div>
+            <br>
+            <div class="modal-body">
+                <div class="row">
+                    <div ng-show="listOperadores.length > 0" class="col-xs-12">
+                        <table id="tblOperadores">
+                            <thead>
+                                <tr>
+                                    <th st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="nombre" st-sort="nombre">
+                                        Nombre
+                                    </th>
+                                    <th st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="telefono" st-sort="telefono">
+                                        Telefono
+                                    </th>
+                                    <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="editar">
+                                        Selecciona
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="operador in listOperadores">
+                                    <td>
+                                        <span>{{operador.nombre}}&nbsp;{{operador.apellidoPaterno}}&nbsp;{{operador.apellidoMaterno}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{operador.telefono}}</span>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info btn-icon" ng-click="seleccionaOpe(operador);">
+                                             <i class="ti-export"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade " id="modalUnidad" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Selecciona Unidad:</h4>
+                <button type="button" class="close" ng-click="salirUni()">&times;</button>
+            </div>
+            <br>
+            <div class="modal-body">
+                <div class="row">
+                    <div ng-show="listUnidades.length > 0" class="col-xs-12">
+                        <table id="tblUnidades">
+                            <thead>
+                                <tr>
+                                    <th class="inputWitd" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="descripcion">
+                                        Económico
+                                    </th>
+                                    <th class="inputWitd" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="numeroSerie">
+                                        # Serie
+                                    </th>
+                                    <!-- <th st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="modelo">
+                                        Modelo
+                                    </th> -->
+                                    <!-- <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="color">
+                                        Color
+                                    </th> -->
+                                    <th class="inputWitd" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="placas">
+                                        Placas
+                                    </th>
+                                    <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="tipo">
+                                        Tipo
+                                    </th>
+                                    <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="capacidad">
+                                        Capacidad
+                                    </th>
+                                    <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="metrosCubicos">
+                                        m3
+                                    </th>
+                                    <th class="oculta" st-class-ascent="fa fa-sort-asc" st-class-descent="fa fa-sort-desc" st-skip-natural="true" st-sort="editar">
+                                        Seleccionar
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="unidad in listUnidades">
+                                    <td>
+                                        <span>{{unidad.economico}}</span>
+                                        <!-- {{unidad.descripcion}} {{unidad.modelo}} {{unidad.anio}} -->
+                                    </td>
+                                    <td>
+                                        <span>{{unidad.numeroSerie}}</span>
+                                    </td>
+                                   <!--  <td>
+                                        <span>{{unidad.descripcion}} {{unidad.modelo}}  {{unidad.anio}}</span>
+                                    </td> -->
+                                    <!-- <td>
+                                        <span>{{unidad.color}}</span>
+                                    </td> -->
+                                    <td>
+                                        <span>{{unidad.placas}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{unidad.Tipo}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{unidad.capacidad}} {{unidad.descripcionP}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{unidad.metrosCubicos}}</span>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info btn-icon" ng-click="seleccionaUni(unidad)">
+                                                <i class="ti-export" ></i>
+                                            </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="modal fade " id="modalAddRuta" tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header headerModal">
+                <h4 class="modal-title">Ruta / Operador / Unidad</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <br>
+            <form class="" ng-submit="ruta(1)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="nombreRuta">Nombre:</label>
+                        <div class="col-sm-4">
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                <input ng-disabled="bloquea" ng-model="nombreRuta" placeholder="" id="nombre" type="text" class="form-control" required="true">
+                            </div>
+                        </div>
+                        <label class="col-sm-2 control-label" for="descripcion">Descripción:</label>
+                        <div class="col-sm-4">
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                <input ng-disabled="bloquea" ng-model="descripcion" placeholder="" id="descripcion" class="form-control" required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="nombreRuta">Operador:</label>
+                        <div class="col-sm-4">
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon" ng-click="getOperadores();"><i class="fa fa-plus"></i></span>
+                                <input ng-disabled="bloquea" ng-model="nombreOperador" placeholder="" id="nombreOperador" type="text" class="form-control " required="true">
+                            </div>
+                        </div>
+                        <label class="col-sm-2 control-label" for="descripcion">Unidad:</label>
+                        <div class="col-sm-4">
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon" ng-click="getUnidades();"><i class="fa fa-plus"></i></span>
+                                <input ng-disabled="bloquea" ng-model="unidad" placeholder="" id="unidad" class="form-control " required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary redondeo" name="signup" value="guardar"> Aceptar </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
